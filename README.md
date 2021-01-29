@@ -1,6 +1,6 @@
 ComputerVision
 
-This is a regular paragraph.
+<p style = "color: red">This is a regular paragraph.</p>
 
 <table>
     <tr>
