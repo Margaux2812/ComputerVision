@@ -64,9 +64,20 @@ Major frameworks I used in this project.
 
 ## Run
 
-The program has multiple parameters.
+1. To compile the project
+   ```sh
+   g++ main.cpp -o main -std=c++11 `pkg-config --cflags --libs opencv`
+   ```
+
+2. To compile the project
+   ```sh
+   ./main image/punto.jpg [PARAM] [POWER]
+   ```
+As you can see, the program has multiple parameters.
 
 ### Sobel Filter
+
+	The name of the parameter is ```sh sobel```
 
 ### Erosion
 
