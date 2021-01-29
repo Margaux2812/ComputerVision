@@ -77,7 +77,7 @@ As you can see, the program has multiple parameters.
 
 ### Sobel Filter
 
-	The name of the parameter is ```sh sobel```
+The name of the parameter is <i>sobel</i>
 
 ### Erosion
 
