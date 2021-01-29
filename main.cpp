@@ -16,72 +16,22 @@ using namespace cv;
 
 enum Type {dilation, erosion};
 
-void morph(Mat, Mat, Type);
 Mat jpgToBinary(Mat img);
-Mat morphology(Mat, Type);
-bool isSurrounded(int x, int y);
+
+void morphology(Mat, Type);
+void sobel(Mat);
 
 int main(int argc, const char** argv){
 	
-    std::string imglo = argv[1];
+    std::string imgPath = argv[1];
 
     /* load the image directly in grayscale thanks to the flag*/
-    Mat img = imread(imglo, IMREAD_GRAYSCALE);
-    Mat sobelImg = Mat::zeros(img.size(), img.type());
-
-    /*Asigning values to sobel x direction
-		-1	0	1
-		-2	0	2
-		-1	0	1*/
+    Mat img = imread(imgPath, IMREAD_GRAYSCALE);
     
-	Mat sobel_x = (Mat_<int>(3, 3) << -1, 0, 1, -2, 0, 2, -1, 0, 1);
-
-	/*Asigning values to sobel y direction
-		-1	-2	-1
-		0	0	0
-		1	2	1*/
-    
-	Mat sobel_y = (Mat_<int>(3, 3) << -1, -2, -1, 0, 0, 0, 1, 2, 1);
-
-    for (int y = 0; y<img.rows-2; y++){
-    	for (int x = 0; x<img.cols-2; x++){
-			int pixelValueX =
-			(sobel_x.at<int>(0, 0) * (int)img.at<uchar>(y,x)) + (sobel_x.at<int>(0, 1) * (int)img.at<uchar>(y+1,x)) + (sobel_x.at<int>(0, 2) * (int)img.at<uchar>(y+2,x)) +
-			(sobel_x.at<int>(1, 0) * (int)img.at<uchar>(y,x+1)) + (sobel_x.at<int>(1, 1) * (int)img.at<uchar>(y+1,x+1)) + (sobel_x.at<int>(1, 2) * (int)img.at<uchar>(y+2,x+1)) +
-			(sobel_x.at<int>(2, 0) * (int)img.at<uchar>(y,x+2)) + (sobel_x.at<int>(2, 1) * (int)img.at<uchar>(y+1,x+2)) + (sobel_x.at<int>(2, 2) * (int)img.at<uchar>(y+2,x+2));         
-
-			int pixelValueY =
-			(sobel_y.at<int>(0, 0) * (int)sobelImg.at<uchar>(y,x)) + (sobel_y.at<int>(0, 1) * (int)sobelImg.at<uchar>(y+1,x)) + (sobel_y.at<int>(0, 2) * (int)sobelImg.at<uchar>(y+2,x)) +
-			(sobel_y.at<int>(1, 0) * (int)sobelImg.at<uchar>(y,x+1)) + (sobel_y.at<int>(1, 1) * (int)sobelImg.at<uchar>(y+1,x+1)) + (sobel_y.at<int>(1, 2) * (int)sobelImg.at<uchar>(y+2,x+1)) +
-			(sobel_y.at<int>(2, 0) * (int)sobelImg.at<uchar>(y,x+2)) + (sobel_y.at<int>(2, 1) * (int)sobelImg.at<uchar>(y+1,x+2)) + (sobel_y.at<int>(2, 2) * (int)sobelImg.at<uchar>(y+2,x+2));
-	         
-			int sum = abs(pixelValueX) + abs(pixelValueY);
-
-			/*As the maximum RGB value possible is 255, we have to check*/
-			if (sum > 255){
-				sum = 255;
-			}
-
-			sobelImg.at<uchar>(y,x) = sum;
-    	}
-    }
-    
-    // display the images
-    //namedWindow("Grayscale Image", WINDOW_AUTOSIZE);
-    //namedWindow("Sobel Filter", WINDOW_AUTOSIZE);
-    //imshow("Grayscale Image", img);
-    //imshow("Sobel Filter", sobelImg);
-
-    /*BINARY IMG*/
-    Mat binaryImg = jpgToBinary(img);
-    imshow("Binary Image", binaryImg);
-
+    sobel(img);
     /*MORPH IMG*/
-    Mat morphImg = morphology(binaryImg, erosion);
-    imshow("morphology Image", morphImg);
-
-    waitKey(0);
-
+    //Mat morphImg = morphology(jpgToBinary(img), erosion);
+    
     return 0;
 
 }
@@ -107,29 +57,9 @@ Mat jpgToBinary(Mat img){
     return binaryImg;
 }
 
-/*bool isSurrounded(int x, int y, int width, int height){
-
-	int top, int bottom, int left, int right;
-
-	if(x==0){
-		left = 0;
-	}
-	switch(x){
-		//It doesn't have a left pixel
-		case 0: left = 0;
-		//It doesn't have a right pixel
-		case width-1: right = 0;
-		default:
-	}
-	int top = (int)binaryImg.at<uchar>(y-1,x);
-	int bottom = (int)binaryImg.at<uchar>(y+1,x);
-	int left = (int)binaryImg.at<uchar>(y,x-1);
-	int right = (int)binaryImg.at<uchar>(y,x+1);
-}
-
 /* EROSION & DILATION*/
 
-Mat morphology(Mat binaryImg, Type type){
+void morphology(Mat binaryImg, Type type){
 
 	Mat morphImg = Mat::zeros(binaryImg.size(), binaryImg.type());
 	bool needsToChange = false;
@@ -171,46 +101,59 @@ Mat morphology(Mat binaryImg, Type type){
 	    binaryImg = morphImg;
 	}
 
-    return morphImg;
+	namedWindow("Morphology Filter", WINDOW_AUTOSIZE);
+    imshow("morphology Image", morphImg);
+    waitKey(0);
 }
 
-/* grayscale image, binary mask
-void morph(Mat inImage, Mat outImage, kernel, Type type) {
- 	// half size of the kernel, kernel size is n*n (easier if n is odd)
- 	sz = (kernel.n - 1 ) / 2;
+/*SOBEL FILTER FUNCTION*/
+void sobel(Mat img){
 
-	for X in inImage.rows {
-	for Y in inImage.cols {
+	Mat sobelImg = Mat::zeros(img.size(), img.type());
 
-	if ( isOnBoundary(X,Y, inImage, sz) ) {
-	// check if pixel (X,Y) for boundary cases and deal with it (copy pixel as is)
-	// must consider half size of the kernel
-	val = inImage(X,Y);       // quick fix
-	}
+    /*Asigning values to sobel x direction
+		-1	0	1
+		-2	0	2
+		-1	0	1*/
+    
+	Mat sobel_x = (Mat_<int>(3, 3) << -1, 0, 1, -2, 0, 2, -1, 0, 1);
 
-	else {
-	list = [];
+	/*Asigning values to sobel y direction
+		-1	-2	-1
+		0	0	0
+		1	2	1*/
+    
+	Mat sobel_y = (Mat_<int>(3, 3) << -1, -2, -1, 0, 0, 0, 1, 2, 1);
 
-	// get the neighborhood of this pixel (X,Y)
-	for I in kernel.n {
-	for J in kernel.n {
-	if ( kernel(I,J) == 1 ) {
-	list.add( inImage(X+I-sz, Y+J-sz) );
-	}
-	}
-	}
+    for (int y = 0; y<img.rows-2; y++){
+    	for (int x = 0; x<img.cols-2; x++){
 
-	if type == dilation {
-	// dilation: set to one if any 1 is present, zero otherwise
-	val = max(list);
-	} else if type == erosion {
-	// erosion: set to zero if any 0 is present, one otherwise
-	val = min(list);
-	}
-	}
+			int pixelValueX =
+			(sobel_x.at<int>(0, 0) * (int)img.at<uchar>(y,x)) + (sobel_x.at<int>(0, 1) * (int)img.at<uchar>(y+1,x)) + (sobel_x.at<int>(0, 2) * (int)img.at<uchar>(y+2,x)) +
+			(sobel_x.at<int>(1, 0) * (int)img.at<uchar>(y,x+1)) + (sobel_x.at<int>(1, 1) * (int)img.at<uchar>(y+1,x+1)) + (sobel_x.at<int>(1, 2) * (int)img.at<uchar>(y+2,x+1)) +
+			(sobel_x.at<int>(2, 0) * (int)img.at<uchar>(y,x+2)) + (sobel_x.at<int>(2, 1) * (int)img.at<uchar>(y+1,x+2)) + (sobel_x.at<int>(2, 2) * (int)img.at<uchar>(y+2,x+2));         
 
-	// set output image pixel
-	outImage(X,Y) = val;
-	}
-	}
-}*/
+			int pixelValueY =
+			(sobel_y.at<int>(0, 0) * (int)sobelImg.at<uchar>(y,x)) + (sobel_y.at<int>(0, 1) * (int)sobelImg.at<uchar>(y+1,x)) + (sobel_y.at<int>(0, 2) * (int)sobelImg.at<uchar>(y+2,x)) +
+			(sobel_y.at<int>(1, 0) * (int)sobelImg.at<uchar>(y,x+1)) + (sobel_y.at<int>(1, 1) * (int)sobelImg.at<uchar>(y+1,x+1)) + (sobel_y.at<int>(1, 2) * (int)sobelImg.at<uchar>(y+2,x+1)) +
+			(sobel_y.at<int>(2, 0) * (int)sobelImg.at<uchar>(y,x+2)) + (sobel_y.at<int>(2, 1) * (int)sobelImg.at<uchar>(y+1,x+2)) + (sobel_y.at<int>(2, 2) * (int)sobelImg.at<uchar>(y+2,x+2));
+	         
+			int sum = abs(pixelValueX) + abs(pixelValueY);
+
+			/*As the maximum RGB value possible is 255, we have to
+			define it to 255 if the value is greater*/
+			if (sum > 255){
+				sum = 255;
+			}
+
+			sobelImg.at<uchar>(y,x) = sum;
+    	}
+    }
+    
+    // display the image
+
+    namedWindow("Sobel Filter", WINDOW_AUTOSIZE);
+    imshow("Sobel Filter", sobelImg);
+    imwrite("image/sobel.jpg", sobelImg);
+    waitKey(0);
+}
