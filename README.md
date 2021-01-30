@@ -79,6 +79,8 @@ As you can see, the program has multiple parameters.
 
 The name of the parameter is <i>sobel</i>
 
+
+
 ### Erosion
 
 ### Dilation

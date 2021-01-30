@@ -17,25 +17,59 @@ using namespace cv;
 enum Type {dilation, erosion};
 
 Mat jpgToBinary(Mat img);
-
-void morphology(Mat, Type);
+void morphology(Mat, Type, int givenPower);
 void sobel(Mat);
 
 int main(int argc, const char** argv){
 	
+	if(argc < 3) {
+      std::cout << "You need to supply at least an image path and a parameter." << std::endl;
+      return -1;
+   	}
+
     std::string imgPath = argv[1];
+    std::string param = argv[2];
+
+    /*Check if the user put a power for the dilation or erosion*/
+    int power = (argc = 4 ? std::stoi(argv[3]) : 1);
 
     /* load the image directly in grayscale thanks to the flag*/
     Mat img = imread(imgPath, IMREAD_GRAYSCALE);
-    
-    sobel(img);
-    /*MORPH IMG*/
-    //Mat morphImg = morphology(jpgToBinary(img), erosion);
-    
+	/*Handle error if the file wasn't found*/
+
+
+    std::vector<std::string> parametersPossible {"sobel", "erosion", "dilation"};
+
+    /*Check if the parameter is valid*/
+    if(std::find(parametersPossible.begin(), parametersPossible.end(), param) == parametersPossible.end()){
+      std::cout << "The parameter can be \"sobel\", \"erosion\" or \"dilation\"" << std::endl;
+      return -1;
+   	}
+
+    if(!param.compare("sobel")){
+    	
+    	sobel(img);
+
+    }else if(!param.compare("erosion")){
+
+    	morphology(jpgToBinary(img), erosion, power);
+
+    }else if(!param.compare("dilation")){
+
+    	morphology(jpgToBinary(img), dilation, power);
+
+    }else{
+
+    	return 0;
+
+    }
+
     return 0;
 
 }
 
+
+/*Convert image to binary image*/
 Mat jpgToBinary(Mat img){
 
 	Mat binaryImg = Mat::zeros(img.size(), img.type());
@@ -59,18 +93,16 @@ Mat jpgToBinary(Mat img){
 
 /* EROSION & DILATION*/
 
-void morphology(Mat binaryImg, Type type){
+void morphology(Mat binaryImg, Type type, int givenPower){
 
 	Mat morphImg = Mat::zeros(binaryImg.size(), binaryImg.type());
-	bool needsToChange = false;
-	int pixelSurroundingsSum;
-	int amount = 0;
-	int givenAmount = 1;
+	int power = 0;
 
-	/*We will look at the pixel surrounding our pixel
-	and if it is black, we will expand/shrunk it*/
+	/*We do the action as many time as the user asked (the power parameter)*/
+	while(power < givenPower){
 
-	while(amount < givenAmount){
+		/*We will look at the pixel surrounding our pixel*/
+
 	    for (int y = 0; y<binaryImg.rows-2; y++){
 	    	for (int x = 0; x<binaryImg.cols-2; x++){
 
@@ -90,19 +122,30 @@ void morphology(Mat binaryImg, Type type){
 
 	    			morphImg.at<uchar>(y,x) = 255;
 	    		}else{
+
 	    			morphImg.at<uchar>(y,x) = 0;
 	    		}
 	    		
 	    	}
 	    }
 
-	   amount++;
+	    /*Count the power we are on to*/
+	   	power++;
 
+	   	/*Change the image we take as the reference for the futur occurences*/
 	    binaryImg = morphImg;
 	}
 
-	namedWindow("Morphology Filter", WINDOW_AUTOSIZE);
-    imshow("morphology Image", morphImg);
+    // display the image
+    std::string title = "Morphology Filter - ";
+    if(type == dilation)
+    	title += "dilation";
+    else
+    	title += "erosion";
+
+    namedWindow(title, WINDOW_AUTOSIZE);
+    imshow(title, morphImg);
+    imwrite("image/binaryMorphology.jpg", morphImg);
     waitKey(0);
 }
 
@@ -151,7 +194,6 @@ void sobel(Mat img){
     }
     
     // display the image
-
     namedWindow("Sobel Filter", WINDOW_AUTOSIZE);
     imshow("Sobel Filter", sobelImg);
     imwrite("image/sobel.jpg", sobelImg);
