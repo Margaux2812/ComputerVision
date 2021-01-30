@@ -31,7 +31,10 @@ int main(int argc, const char** argv){
     std::string param = argv[2];
 
     /*Check if the user put a power for the dilation or erosion*/
-    int power = (argc = 4 ? std::stoi(argv[3]) : 1);
+    int power = 1;
+    if(argc == 4){
+    	power = std::stoi(argv[3]);
+    }
 
     /* load the image directly in grayscale thanks to the flag*/
     Mat img = imread(imgPath, IMREAD_GRAYSCALE);
@@ -112,9 +115,9 @@ void morphology(Mat binaryImg, Type type, int givenPower){
 	    		the pixels surrounding are all white, and if they
 	    		are not, then we turn the actual pixel black, because
 	    		it means we are on an edge*/
-	    		if(sum == 4*255 && type == erosion){ 
+	    		if(sum == 4*255 && type == dilation){ 
 	    			morphImg.at<uchar>(y,x) = 255;
-	    		}else if(sum != 0 && type == dilation){
+	    		}else if(sum != 0 && type == erosion){
 	    		/*In the case of dilation, we want to check if
 	    		at least one of the pixels surrounding is white, and if
 	    		there is, then we turn the actual pixel white, because
@@ -139,9 +142,9 @@ void morphology(Mat binaryImg, Type type, int givenPower){
     // display the image
     std::string title = "Morphology Filter - ";
     if(type == dilation)
-    	title += "dilation";
+    	title += "Dilation";
     else
-    	title += "erosion";
+    	title += "Erosion";
 
     namedWindow(title, WINDOW_AUTOSIZE);
     imshow(title, morphImg);
