@@ -100,6 +100,7 @@ void morphology(Mat binaryImg, Type type, int givenPower){
 
 	Mat morphImg = Mat::zeros(binaryImg.size(), binaryImg.type());
 	int power = 0;
+	int sum;
 
 	/*We do the action as many time as the user asked (the power parameter)*/
 	while(power < givenPower){
@@ -109,7 +110,7 @@ void morphology(Mat binaryImg, Type type, int givenPower){
 	    for (int y = 0; y<binaryImg.rows-2; y++){
 	    	for (int x = 0; x<binaryImg.cols-2; x++){
 
-	    		int sum = (int)binaryImg.at<uchar>(y+1,x)+(int)binaryImg.at<uchar>(y,x+1) + (int)binaryImg.at<uchar>(y+1,x+2) + (int)binaryImg.at<uchar>(y+2,x+1);
+	    		sum = (int)binaryImg.at<uchar>(y+1,x)+(int)binaryImg.at<uchar>(y,x+1) + (int)binaryImg.at<uchar>(y+1,x+2) + (int)binaryImg.at<uchar>(y+2,x+1);
 
 	    		/*In the case of erosion, we want to check if
 	    		the pixels surrounding are all white, and if they
