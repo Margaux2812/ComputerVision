@@ -79,7 +79,15 @@ As you can see, the program has multiple parameters.
 
 The name of the parameter is <i>sobel</i>
 
+The operator uses two 3×3 kernels which are convolved with the original image to calculate approximations of the derivatives – one for horizontal changes, and one for vertical. If we define A as the source image, and Gx and Gy are two images which at each point contain the horizontal and vertical derivative approximations respectively, the computations are as follows:
 
+```math
+Gx = \begin{matrix}
+  +1 & 0 & -1\\
+  +2 & 0 & -2\\
+  +1 & 0 & -1
+  \end{matrix}
+```
 
 ### Erosion
 
