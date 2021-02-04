@@ -132,11 +132,11 @@ The x-coordinate is defined here as increasing in the "right"-direction, and the
 
 ### Erosion
 
-The name of the parameter is <i>erosion</i>. A parameter <i>value</i> can be added. It must be an int and will represent the number of erosions we will perform.
+The name of the parameter is <i>erosion</i>. A parameter <i>power</i> can be added. It must be an int and will represent the number of erosions we will perform.
 
 ### Dilation
 
-The name of the parameter is <i>dilation</i>. A parameter <i>value</i> can be added. It must be an int and will represent the number of dilations we will perform.
+The name of the parameter is <i>dilation</i>. A parameter <i>power</i> can be added. It must be an int and will represent the number of dilations we will perform.
 
 <!-- CONTACT -->
 
