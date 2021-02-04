@@ -89,6 +89,7 @@ The operator uses two 3×3 kernels which are convolved with the original image t
     <td>+1</td>
     <td>0</td>
     <td>-1</td>
+    <td rowspan="3"> * A </td>
   </tr>
   <tr>
     <td>+2</td>
@@ -109,7 +110,7 @@ and
 
 <table>
   <tr>
-    <td rowspan="4">Gy = </td>
+    <td rowspan="5">Gy = </td>
   </tr>
   <tr>
     <td>+1</td>
@@ -127,12 +128,12 @@ and
     <td>-1</td>
   </tr>
   <tr>
-    <td rowspan="4"> * A </td>
+    <td rowspan="5"> * A </td>
   </tr>
 </table>
 
 The x-coordinate is defined here as increasing in the "right"-direction, and the y-coordinate is defined as increasing in the "down"-direction. At each point in the image, the resulting gradient approximations can be combined to give the gradient magnitude, using: 
-<img src="https://render.githubusercontent.com/render/math?math=G = sqrt(Gx² + Gy²)">
+<img src="https://render.githubusercontent.com/render/math?math=G = \sqrt{Gx^{2} + Gy^{2}}">
 
 ### Erosion
 
