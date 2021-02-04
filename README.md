@@ -89,6 +89,11 @@ Gx = \begin{matrix}
   \end{matrix}
 ```
 
+```math
+a^2+b^2=c^2
+```
+
+
 ### Erosion
 
 ### Dilation
