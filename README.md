@@ -14,14 +14,23 @@
       <a href="#about-the-project">About The Project</a>
     </li>
     <li>
+      <a href="#build-with">Build With</a>
+    </li>
+    <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
+    <li>
+      <a href="#run">Run</a>
+      <ul>
+        <li><a href="#sobel-filter">Sobel Filter</a></li>
+        <li><a href="#erosion">Erosion</a></li>
+        <li><a href="#dilation">Dilation</a></li>
+      </ul>
+    </li>
     <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
