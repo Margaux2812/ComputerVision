@@ -33,7 +33,9 @@ int main(int argc, const char** argv){
     /*Check if the user put a power for the dilation or erosion*/
     int power = 1;
     if(argc == 4){
-    	power = std::stoi(argv[3]);
+    	//Check if it is an integer indeed
+    	if(std::stoi(argv[3]) > 0)
+    		power = std::stoi(argv[3]);
     }
 
     /* load the image directly in grayscale thanks to the flag*/

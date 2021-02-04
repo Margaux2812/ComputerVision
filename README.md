@@ -128,11 +128,15 @@ and
 </table>
 
 The x-coordinate is defined here as increasing in the "right"-direction, and the y-coordinate is defined as increasing in the "down"-direction. At each point in the image, the resulting gradient approximations can be combined to give the gradient magnitude, using: 
-<img src="https://render.githubusercontent.com/render/math?math=G = \sqrt{G_{x}^{2} %2B G_{y}^{2}}"> or <img src="https://render.githubusercontent.com/render/math?math=G = abs(G_{x}) %2B abs(G_{y}})">
+<img src="https://render.githubusercontent.com/render/math?math=G = \sqrt{G_{x}^{2} %2B G_{y}^{2}}"> or just by summing the absolute value.
 
 ### Erosion
 
+The name of the parameter is <i>erosion</i>. A parameter <i>value</i> can be added. It must be an int and will represent the number of erosions we will perform.
+
 ### Dilation
+
+The name of the parameter is <i>dilation</i>. A parameter <i>value</i> can be added. It must be an int and will represent the number of dilations we will perform.
 
 <!-- CONTACT -->
 
