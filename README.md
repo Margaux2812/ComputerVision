@@ -81,7 +81,7 @@ The name of the parameter is <i>sobel</i>
 
 The operator uses two 3×3 kernels which are convolved with the original image to calculate approximations of the derivatives – one for horizontal changes, and one for vertical. If we define A as the source image, and Gx and Gy are two images which at each point contain the horizontal and vertical derivative approximations respectively, the computations are as follows:
 
-<table style="display: inline">
+<table>
   <tr>
     <td rowspan="4">Gx = </td>
   </tr>
@@ -100,11 +100,14 @@ The operator uses two 3×3 kernels which are convolved with the original image t
     <td>0</td>
     <td>-1</td>
   </tr>
+  <tr>
+    <td rowspan="4"> * A </td>
+  </tr>
 </table>
 
 and
 
-<table style="display: inline; background: none; border: none;">
+<table>
   <tr>
     <td rowspan="4">Gy = </td>
   </tr>
@@ -123,8 +126,13 @@ and
     <td>-2</td>
     <td>-1</td>
   </tr>
+  <tr>
+    <td rowspan="4"> * A </td>
+  </tr>
 </table>
 
+The x-coordinate is defined here as increasing in the "right"-direction, and the y-coordinate is defined as increasing in the "down"-direction. At each point in the image, the resulting gradient approximations can be combined to give the gradient magnitude, using: 
+<img src="https://render.githubusercontent.com/render/math?math=G = sqrt(Gx² + Gy²)">
 
 ### Erosion
 
