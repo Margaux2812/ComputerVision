@@ -83,7 +83,7 @@ The operator uses two 3×3 kernels which are convolved with the original image t
 
 <table>
   <tr>
-    <td rowspan="3">Gx</td>
+    <td rowspan="4">Gx = </td>
   </tr>
   <tr>
     <td>+1</td>
