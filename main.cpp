@@ -187,7 +187,7 @@ void sobel(Mat img){
 			(sobel_y.at<int>(1, 0) * (int)sobelImg.at<uchar>(y,x+1)) + (sobel_y.at<int>(1, 1) * (int)sobelImg.at<uchar>(y+1,x+1)) + (sobel_y.at<int>(1, 2) * (int)sobelImg.at<uchar>(y+2,x+1)) +
 			(sobel_y.at<int>(2, 0) * (int)sobelImg.at<uchar>(y,x+2)) + (sobel_y.at<int>(2, 1) * (int)sobelImg.at<uchar>(y+1,x+2)) + (sobel_y.at<int>(2, 2) * (int)sobelImg.at<uchar>(y+2,x+2));
 	         
-			int sum = abs(pixelValueX) + abs(pixelValueY);
+			int sum = sqrt(pixelValueX * pixelValueX + pixelValueY * pixelValueY);
 
 			/*As the maximum RGB value possible is 255, we have to
 			define it to 255 if the value is greater*/
